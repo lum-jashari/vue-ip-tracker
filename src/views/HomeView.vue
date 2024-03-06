@@ -30,11 +30,22 @@ onMounted(() => {
 
 const getIpInfo = async () => {
   try {
-    const data = await axios.get(
-      `https://geo.ipify.org/api/v2/country?apiKey=${
-        import.meta.env.VITE_API_IPGEO
-      }=${queryIp}`
-    );
+    const response = (
+      await axios.get(
+        `https://geo.ipify.org/api/v2/country?apiKey=${
+          import.meta.env.VITE_API_IPGEO
+        }&ipAddress=${queryIp.value}`
+      )
+    ).data;
+
+    ipInfo.value = {
+      address: response.ip,
+      state: response.location.region,
+      timezone: response.location.timezone,
+      isp: response.isp,
+      lat: response.location.lat,
+      lng: response.location.lng,
+    };
   } catch (error) {
     alert(error.message);
   }
@@ -59,11 +70,12 @@ const getIpInfo = async () => {
           />
           <i
             class="cursor-pointer bg-black text-white px-4 rounded-tr-md rounded-br-md flex items-center fa-solid fa-chevron-right"
+            @click="getIpInfo"
           ></i>
         </div>
       </div>
       <!-- ip info -->
-      <IPInfo v-if="ipInfo" />
+      <IPInfo v-if="ipInfo" :ipInfo="ipInfo" />
     </div>
     <!-- map -->
     <div id="map" class="h-full z-10"></div>
