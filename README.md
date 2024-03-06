@@ -1,29 +1,45 @@
-# vue-ip-tracker
+# Vue.js Map App
 
-This template should help get you started developing with Vue 3 in Vite.
+This project is a map application developed using Vue.js, Tailwind CSS, and Leaflet. It serves as a learning project to understand and practice frontend development with Vue.js and integrating it with other libraries like Leaflet for maps and Tailwind CSS for styling.
 
-## Recommended IDE Setup
+## Features
 
-[VSCode](https://code.visualstudio.com/) + [Volar](https://marketplace.visualstudio.com/items?itemName=Vue.volar) (and disable Vetur) + [TypeScript Vue Plugin (Volar)](https://marketplace.visualstudio.com/items?itemName=Vue.vscode-typescript-vue-plugin).
+- Search for IP Addresses and display them on the map
+- Plot searched locations on the map with markers
+- Show details of each IP
 
-## Customize configuration
+## Installation
 
-See [Vite Configuration Reference](https://vitejs.dev/config/).
+1. Clone the repository:
 
-## Project Setup
+   ```bash
+   git clone https://github.com/lum-jashari/vue-ip-tracker.git
+   ```
 
-```sh
-npm install
-```
+2. Navigate to the project directory:
 
-### Compile and Hot-Reload for Development
+   ```bash
+   cd vue-ip-tracker
+   ```
 
-```sh
-npm run dev
-```
+3. Install dependencies:
 
-### Compile and Minify for Production
+   ```bash
+   npm install
+   ```
 
-```sh
-npm run build
-```
+4. Run the development server:
+
+   ```bash
+   npm run dev
+   ```
+
+5. Visit `http://localhost:5173` in your browser to view the application.
+
+## Screenshot
+
+![vue-ip-tracker screenshot](src/assets/vue-ip-tracker.jpg?raw=true "Vue IP Tracker")
+
+## Credits
+
+This project was developed as a part of learning Vue.js and integrating it with other libraries. It was inspired by various online tutorials and resources.

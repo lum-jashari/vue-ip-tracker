@@ -4,12 +4,12 @@ import axios from "axios";
 import leaflet from "leaflet";
 import { onMounted, ref } from "vue";
 
-let myMap;
+let map;
 const queryIp = ref("");
 const ipInfo = ref(null);
 
 onMounted(() => {
-  myMap = leaflet.map("map").setView([51.505, -0.09], 13);
+  map = leaflet.map("map").setView([51.505, -0.09], 13);
 
   leaflet
     .tileLayer(
@@ -25,7 +25,7 @@ onMounted(() => {
         accessToken: import.meta.env.VITE_API_LEAFLET,
       }
     )
-    .addTo(myMap);
+    .addTo(map);
 });
 
 const getIpInfo = async () => {
@@ -46,6 +46,26 @@ const getIpInfo = async () => {
       lat: response.location.lat,
       lng: response.location.lng,
     };
+    const params = new URLSearchParams({
+      access_token: import.meta.env.VITE_API_LEAFLET,
+      fuzzyMatch: true,
+      language: "en",
+      limit: 1,
+    });
+
+    const location = (
+      await axios(
+        `https://api.mapbox.com/geocoding/v5/mapbox.places/${ipInfo.value.state}.json?${params}`
+      )
+    ).data;
+
+    const newCoords = {
+      lng: location.features[0].geometry.coordinates[0],
+      lat: location.features[0].geometry.coordinates[1],
+    };
+
+    leaflet.marker([newCoords.lat, newCoords.lng]).addTo(map);
+    map.setView([newCoords.lat, newCoords.lng], 8);
   } catch (error) {
     alert(error.message);
   }
