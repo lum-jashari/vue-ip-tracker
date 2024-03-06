@@ -1,27 +1,44 @@
 <script setup>
 import IPInfo from "@/components/IPInfo.vue";
+import axios from "axios";
 import leaflet from "leaflet";
-import { onMounted } from "vue";
+import { onMounted, ref } from "vue";
 
 let myMap;
+const queryIp = ref("");
+const ipInfo = ref(null);
 
 onMounted(() => {
   myMap = leaflet.map("map").setView([51.505, -0.09], 13);
 
   leaflet
     .tileLayer(
-      "https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=",
+      `https://api.mapbox.com/styles/v1/{id}/tiles/{z}/{x}/{y}?access_token=${
+        import.meta.env.VITE_API_LEAFLET
+      }`,
       {
         attribution: '&copy; <a href="http://www.mapbox.com">MapBox</a>',
         maxZoom: 18,
         id: "mapbox/streets-v11",
         tileSize: 512,
         zoomOffset: -1,
-        accessToken: "",
+        accessToken: import.meta.env.VITE_API_LEAFLET,
       }
     )
     .addTo(myMap);
 });
+
+const getIpInfo = async () => {
+  try {
+    const data = await axios.get(
+      `https://geo.ipify.org/api/v2/country?apiKey=${
+        import.meta.env.VITE_API_IPGEO
+      }=${queryIp}`
+    );
+  } catch (error) {
+    alert(error.message);
+  }
+};
 </script>
 
 <template>
@@ -38,6 +55,7 @@ onMounted(() => {
             class="flex-1 py-3 pl-2 rounded-tl-md rounded-bl-md focus:outline-none"
             type="text"
             placeholder="Search for any IP address or leave it empty to get your IP info"
+            v-model="queryIp"
           />
           <i
             class="cursor-pointer bg-black text-white px-4 rounded-tr-md rounded-br-md flex items-center fa-solid fa-chevron-right"
@@ -45,7 +63,7 @@ onMounted(() => {
         </div>
       </div>
       <!-- ip info -->
-      <IPInfo />
+      <IPInfo v-if="ipInfo" />
     </div>
     <!-- map -->
     <div id="map" class="h-full z-10"></div>
